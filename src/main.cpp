@@ -8,6 +8,7 @@
 #include <SFML/System.hpp>
 
 #include "InputManager.h"
+#include "ResourceManager.h"
 
 using namespace std;
 using namespace sf;
@@ -16,30 +17,22 @@ using namespace Framework;
 int main()
 {
 	RenderWindow window(VideoMode(600, 600), "SFML works!");
-	Font font;
-	if (!font.loadFromFile("../resources/arial.ttf"))
-		return 0;
-	Texture texture;
-	//ResourceManager::GetInstance()->GetTexture("texture1");
-	/*
-	resources/textures/level1/texture1
-	resources/textures/level2/texture1
-	resources/textures/names.txt
-		level1/texture1 texturaMea
-		level2/texture1 texturaTa
-	*/
-	if (!texture.loadFromFile("../resources/texture1.JPG"))
-		return 0;
-	Music music;
-	if (!music.openFromFile("../resources/music.ogg"))
-		return 0;
-	//music.play();
-	Sprite sprite;
-	sprite.setTexture(texture);
-	sprite.setTextureRect(IntRect(0, 0, 200, 200));
-	sprite.setOrigin(100, 100);	
+
+	InputManager *inputManager = InputManager::GetInstance();
+	inputManager->Init();
+
+	ResourceManager *resourcesManager = new ResourceManager();
+	resourcesManager->Init();
+
+	Texture *texture = resourcesManager->GetTexture("weave");
+	RectangleShape player;
+	player.setSize(Vector2f(200, 100));
+	player.setPosition(Vector2f(150, 150));
+	player.setTexture(texture);
+
+	Font *font = resourcesManager->GetFont("arial");
 	Text text;
-	text.setFont(font);
+	text.setFont(*font);
 	text.setString("Hello world!");
 	text.setCharacterSize(50);
 	text.setFillColor(Color::Red);
@@ -47,26 +40,7 @@ int main()
 	text.setOutlineColor(Color::Magenta);
 	text.setPosition(Vector2f(100, 100));
 	text.setRotation(45);
-	CircleShape circle;
-	circle.setFillColor(Color::Cyan);
-	circle.setRadius(100);
-	circle.setPosition(Vector2f(50, 50));
-	circle.setTexture(&texture);
-	RectangleShape player;
-	player.setSize(Vector2f(200, 100));
-	player.setPosition(Vector2f(150, 150));
-	player.setTexture(&texture);
-	ConvexShape convex;
-	convex.setPointCount(5);
-	convex.setFillColor(Color::Cyan);
-	convex.setPosition(Vector2f(100, 100));
-	convex.setPoint(0, sf::Vector2f(0.f, 0.f));
-	convex.setPoint(1, sf::Vector2f(150.f, 10.f));
-	convex.setPoint(2, sf::Vector2f(120.f, 90.f));
-	convex.setPoint(3, sf::Vector2f(30.f, 100.f));
-	convex.setPoint(4, sf::Vector2f(0.f, 50.f));
-	InputManager *inputManager = InputManager::GetInstance();
-	inputManager->Init();
+
 	while (window.isOpen())
 	{
 		Event event;
@@ -92,11 +66,11 @@ int main()
 					cout << "wheel type: horizontal" << endl;
 				else
 					cout << "wheel type: unknown" << endl;
-				int val = music.getVolume();
+				/*int val = music.getVolume();
 				if (event.mouseWheelScroll.delta == 1)
 					music.setVolume(val + 5);
 				else
-					music.setVolume(val - 5);
+					music.setVolume(val - 5);*/
 
 				cout << "wheel movement: " << event.mouseWheelScroll.delta << endl;
 				cout << "mouse x: " << event.mouseWheelScroll.x << endl;
@@ -132,18 +106,12 @@ int main()
 		}
 
 		if (inputManager->IsKeyPressed(KeyA))
-			cout << "!!!!!! 1\n";
-		if (Keyboard::isKeyPressed(Keyboard::Key::A))
-			cout << "!!!!!! 2\n";
-
-
-		if (inputManager->IsKeyPressed(KeyA))
 			player.move(-0.1f, 0.0f);
-		if (Keyboard::isKeyPressed(Keyboard::Key::D))
+		if (inputManager->IsKeyPressed(KeyD))
 			player.move(0.1f, 0.0f);
-		if (Keyboard::isKeyPressed(Keyboard::Key::W))
+		if (inputManager->IsKeyPressed(KeyW))
 			player.move(0.0f, -0.1f);
-		if (Keyboard::isKeyPressed(Keyboard::Key::S))
+		if (inputManager->IsKeyPressed(KeyS))
 			player.move(0.0f, 0.1f);
 		
 		// updates:
@@ -153,6 +121,5 @@ int main()
 		window.draw(player);
 		window.display();
 	}
-	music.stop();
 	return 0;
 }

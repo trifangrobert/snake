@@ -24,9 +24,15 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="InputManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
       <Filter>Framework</Filter>
     </ClInclude>
   </ItemGroup>
