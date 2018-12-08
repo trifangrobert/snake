@@ -16,21 +16,21 @@ using namespace Framework;
 
 int main()
 {
+	
 	RenderWindow window(VideoMode(600, 600), "SFML works!");
 
 	InputManager *inputManager = InputManager::GetInstance();
 	inputManager->Init();
 
-	ResourceManager *resourcesManager = new ResourceManager();
-	resourcesManager->Init();
+	g_resourceManager->Init();
 
-	Texture *texture = resourcesManager->GetTexture("weave");
+	Texture *texture = g_resourceManager->GetTexture("weave");
 	RectangleShape player;
 	player.setSize(Vector2f(200, 100));
 	player.setPosition(Vector2f(150, 150));
 	player.setTexture(texture);
 
-	Font *font = resourcesManager->GetFont("arial");
+	Font *font = g_resourceManager->GetFont("arial");
 	Text text;
 	text.setFont(*font);
 	text.setString("Hello world!");
@@ -118,7 +118,7 @@ int main()
 		inputManager->Update();
 
 		window.clear();
-		window.draw(player);
+		window.draw(text);
 		window.display();
 	}
 	return 0;
